@@ -15,17 +15,14 @@ def embed_text(text):
         model="gemini-embedding-001",
         contents=text
     )
-    return result.embeddings  # list / numpy-like vector
+    return result.embeddings  
 
 MODEL = "gemini-2.5-flash"
 MAX_CONTEXT_MESSAGES = 8
 TEMPERATURE = 0.2
 
 def build_prompt(system_prompt, history, user_input):
-    """
-    Use a single free-text prompt approach. Not JSON-based rules.
-    We create a small instruction + recent conversation + current user input.
-    """
+    
     # system instruction + recent messages
     parts = [f"SYSTEM: {system_prompt}\n"]
     for role, text in history[-MAX_CONTEXT_MESSAGES:]:
@@ -43,7 +40,7 @@ def generate_reply(prompt):
             "max_output_tokens": 512
         }
     )
-    # The SDK response object exposes `.text` for convenience
+    
     return resp.text
 
 def chat_loop():
@@ -51,7 +48,7 @@ def chat_loop():
         "You are a helpful, concise assistant. Provide clear answers; when unsure, say you don't know. "
         "Prefer short step-by-step instructions when asked."
     )
-    history = []  # list of tuples: (role, text), role in {"user","assistant"}
+    history = []  
     print("Chatbot ready — type 'quit' to exit.")
     while True:
         user_input = input("\nYou: ")
@@ -61,7 +58,7 @@ def chat_loop():
         prompt = build_prompt(system_prompt, history, user_input)
         reply = generate_reply(prompt)
 
-        # store conversation (pure LLM-driven — no JSON interchange)
+        
         history.append(("user", user_input))
         history.append(("assistant", reply))
         print("\nBot:", reply)
