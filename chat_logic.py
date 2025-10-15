@@ -33,7 +33,7 @@ def generate_reply(prompt):
         contents=prompt,
         config={
             "temperature": TEMPERATURE,
-            "max_output_tokens": 512
+            "max_output_tokens": 1024
         }
     )
     

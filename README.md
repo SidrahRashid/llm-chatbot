@@ -1,129 +1,69 @@
-📘 Gemini AI Chatbot
+🌐 Gemini AI Chatbot (Web App)
 
-A Python-based AI chatbot powered by Google Gemini API, capable of free-text conversation without any rule-based logic or JSON formatting. This project demonstrates building a pure LLM-driven chatbot with conversation memory and a simple terminal interface.
+A Python Flask web app powered by Google Gemini API, allowing real-time AI conversations through a browser. The chatbot is fully LLM-driven, preserves conversation context, and is accessible globally without exposing your API key.
 
 🌟 Features
-
-Pure AI-powered chatbot: No rule-based logic, JSON, or pre-defined flows.
-
-Contextual memory: Remembers the last few messages for coherent conversations.
-
-Configurable behavior: Adjust model, temperature, and response length.
-
-Safe API usage: API key managed via environment variables; no hardcoding.
-
-Lightweight terminal interface for fast testing.
-
-Can be extended with RAG / embeddings for more factual answers.
+AI-driven conversations: No rules, JSON, or predefined flows — pure Gemini LLM responses.
+Context memory: Remembers the last messages for coherent replies.
+Web interface: Simple, interactive, and user-friendly.
+Global access: Can be deployed on any server for worldwide usage.
+Secure API handling: Gemini API key is never exposed to users.
 
 ⚙️ Technologies Used
-
 Python 3.12+
-
-Google GenAI SDK (google-genai)
-
-Optional: python-dotenv for local environment variable management
+Flask
+ – Lightweight web framework
+Google GenAI SDK
+ – Gemini API integration
+python-dotenv
+ – Manage environment variables
 
 💻 Installation
-
 Clone the repository
 
-git clone https://github.com/yourusername/gemini-ai-chatbot.git
-cd gemini-ai-chatbot
+git clone https://github.com/SidrahRashid/gemini-ai-chatbot-web.git
+cd gemini-ai-chatbot-web
 
-
-Create a virtual environment (recommended)
-
+Create a virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux / Mac
 venv\Scripts\activate     # Windows
 
 
 Install dependencies
-
-pip install -U google-genai
-# optional: if using .env
-pip install python-dotenv
-
+pip install -r requirements.txt
 
 Set up your Gemini API key
 
-Option 1 (Environment Variable):
 
-# Windows PowerShell
-setx GEMINI_API_KEY "your_actual_api_key_here"
+🚀 Run the Web App Locally
+python app.py
+Open a browser → http://127.0.0.1:5000
 
-# Linux / Mac
-export GEMINI_API_KEY="your_actual_api_key_here"
+Start chatting with your Gemini AI chatbot.
 
+🌐 How It Works
 
-Option 2 (Using .env file):
+User input is entered in the web interface.
+Flask backend sends input to Gemini API using the secure API key.
+AI generates a context-aware response.
+The response is displayed on the web page in real-time.
+Conversation history is stored server-side, maintaining context across messages.
 
-Create a .env file in project root:
+🔧 Configuration Options
+Parameter	Description
+MODEL	Gemini chat model (default: "gemini-2.5-flash")
+TEMPERATURE	Controls creativity of responses (0 = deterministic, 1 = very creative)
+MAX_CONTEXT_MESSAGES	Number of previous messages remembered for context
 
-GEMINI_API_KEY=your_actual_api_key_here
+🔒 Security Notes
 
+API key is never exposed to the browser or users.
+Monitor API usage to prevent unexpected costs.
 
-Ensure .env is listed in .gitignore.
+📈 Future Enhancements
 
-🚀 Usage
-
-Run the chatbot script:
-
-python chatbothf.py
-
-
-Chat with the AI in your terminal:
-
-Chatbot ready — type 'quit' to exit.
-
-You: hi
-Bot: Hello! How are you today?
-
-
-To exit, type:
-
-quit
-
-
-or
-
-exit
-
-🔧 Configuration
-
-You can customize the chatbot in chatbothf.py:
-
-Variable	Description
-MODEL	Gemini model to use (e.g., "gemini-2.0-flash")
-TEMPERATURE	Controls creativity (0 = deterministic, 1 = creative)
-MAX_CONTEXT_MESSAGES	Number of recent messages remembered for context
-💡 How it works
-
-The chatbot reads the system prompt (instructions for AI).
-
-It constructs a prompt combining the system instruction + recent conversation + current user input.
-
-Sends the prompt to Google Gemini API using the google-genai SDK.
-
-Receives the AI-generated reply and prints it in the terminal.
-
-Stores the conversation in memory to maintain context.
-
-🔒 Security
-
-Never hardcode your API key. Always use environment variables or .env.
-
-Add .env to .gitignore to prevent accidental commits.
-
-Monitor your API usage to avoid unexpected charges.
-
-📈 Future Improvements
-
-Add a web interface using Flask or FastAPI.
-
-Integrate RAG (retrieval-augmented generation) for knowledge-based responses.
-
-Add logging and session management for multiple users.
-
-Add conversation summaries to reduce token usage.
+Add user authentication for multiple users.
+Integrate RAG (retrieval-augmented generation) for factual responses.
+Deploy to Render / Heroku / AWS / GCP for full global access.
+Improve UI with modern frontend frameworks like React or Vue.
