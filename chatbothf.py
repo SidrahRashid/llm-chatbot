@@ -15,8 +15,8 @@ def embed_text(text):
     return result.embeddings  
 
 MODEL = "gemini-2.5-flash"
-MAX_CONTEXT_MESSAGES = 8
-TEMPERATURE = 0.2
+MAX_CONTEXT_MESSAGES = 10
+TEMPERATURE = 0.8
 
 def build_prompt(system_prompt, history, user_input):
     
