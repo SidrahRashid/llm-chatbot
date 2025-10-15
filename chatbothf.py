@@ -4,11 +4,8 @@ from google import genai
 
 load_dotenv() 
 
-
 api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
-
-
 
 def embed_text(text):
     result = client.models.embed_content(
@@ -31,7 +28,6 @@ def build_prompt(system_prompt, history, user_input):
     return "\n".join(parts)
 
 def generate_reply(prompt):
-    # Put generation options inside `config` (correct parameter name)
     resp = client.models.generate_content(
         model=MODEL,
         contents=prompt,
