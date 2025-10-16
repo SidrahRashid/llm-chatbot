@@ -1,0 +1,259 @@
+/* static/styles.css */
+
+/* =====  Variables ===== */
+:root{
+  --bg-1: #0f1724;      /* deep navy */
+  --bg-2: #0b2545;      /* midnight blue */
+  --card: #0f1727;      /* chat card bg */
+  --muted: #98a1b3;
+  --accent: #e09a8d;    /* warm coral */
+  --accent-2: #f6c38a;  /* soft gold */
+  --glass: rgba(255,255,255,0.04);
+  --glass-2: rgba(255,255,255,0.02);
+  --radius: 14px;
+  --max-width: 920px;
+  --ui-padding: 18px;
+  --shadow-1: 0 6px 20px rgba(2,6,23,0.6);
+  --ease: cubic-bezier(.2,.9,.3,1);
+}
+
+/* =====  Base ===== */
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(160deg,var(--bg-1) 0%, var(--bg-2) 60%);
+  color: #e6eef8;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.35;
+}
+
+/* center layout */
+.app-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+
+/* main card */
+.chat-card{
+  width:100%;
+  max-width:var(--max-width);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: calc(var(--radius) + 6px);
+  padding: 20px;
+  box-shadow: var(--shadow-1);
+  display:grid;
+  grid-template-columns: 380px 1fr;
+  gap:20px;
+  overflow:hidden;
+}
+
+/* left column: info / persona panel */
+.panel{
+  padding:var(--ui-padding);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  border: 1px solid var(--glass-2);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* header */
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.logo {
+  width:48px;
+  height:48px;
+  border-radius:10px;
+  background: linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;
+  place-items:center;
+  font-weight:700;
+  color:#111;
+  box-shadow: 0 6px 18px rgba(240,140,110,0.12), inset 0 -2px 6px rgba(0,0,0,0.12);
+}
+.brand h1{
+  margin:0;
+  font-size:1.05rem;
+  letter-spacing:0.2px;
+}
+.brand p{ margin:0; color:var(--muted); font-size:0.86rem; }
+
+/* persona text */
+.panel .desc{ color:var(--muted); font-size:0.92rem; }
+
+/* right column: chat area */
+.chat-area{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:420px;
+}
+
+/* messages container */
+.chat-window{
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  border-radius:12px;
+  padding:16px;
+  height:520px;
+  overflow:auto;
+  border:1px solid var(--glass);
+  scroll-behavior:smooth;
+}
+
+/* message rows */
+.msg{
+  display:flex;
+  gap:12px;
+  margin-bottom:12px;
+  align-items:flex-start;
+  transition: transform 280ms var(--ease), opacity 280ms var(--ease);
+}
+
+/* avatar */
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  font-weight:600;
+  color:#111;
+  font-size:0.9rem;
+  flex-shrink:0;
+}
+
+/* user avatar */
+.avatar.user{
+  background: linear-gradient(135deg,#6fd3ff,#5ab9ff);
+}
+
+/* bot avatar */
+.avatar.bot{
+  background: linear-gradient(135deg,var(--accent), #ffd89b);
+}
+
+/* bubble */
+.bubble{
+  max-width:75%;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:0.95rem;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.32);
+  line-height:1.45;
+}
+
+/* user bubble style (right aligned) */
+.user-row{ justify-content:flex-end; }
+.user-row .bubble{
+  background: linear-gradient(180deg, rgba(90,180,255,0.14), rgba(70,150,255,0.06));
+  color: #e8f9ff;
+  border-radius: 14px 14px 6px 14px;
+}
+
+/* bot bubble */
+.bot-row .bubble{
+  background: linear-gradient(180deg, rgba(255,250,245,0.02), rgba(255,250,245,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--muted);
+  border-radius: 14px 14px 14px 6px;
+}
+
+/* subtle typing animation indicator for bot */
+.typing {
+  display:inline-block;
+  width:40px;
+  text-align:left;
+}
+.dot {
+  display:inline-block;
+  width:8px;
+  height:8px;
+  margin-right:5px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.16);
+  animation: blink 1.2s infinite ease-in-out;
+}
+.dot:nth-child(2){ animation-delay:.15s }
+.dot:nth-child(3){ animation-delay:.3s }
+@keyframes blink {
+  0%, 80%, 100% { transform: translateY(0); opacity: .18; }
+  40% { transform: translateY(-4px); opacity: .9; }
+}
+
+/* bottom composer */
+.composer{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-top:6px;
+}
+.input{
+  flex:1;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background:var(--glass);
+  border-radius:12px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+.input input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  color: #eaf6ff;
+  font-size:0.98rem;
+  padding:8px 6px;
+}
+.btn{
+  background: linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#111;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  box-shadow: 0 10px 22px rgba(232,145,120,0.12);
+  transition: transform 140ms var(--ease), box-shadow 140ms var(--ease);
+}
+.btn:hover{ transform: translateY(-3px); box-shadow: 0 18px 32px rgba(232,145,120,0.14); }
+
+/* small helper buttons in panel */
+.panel .small-btn{
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.03);
+  padding:8px 10px;
+  border-radius:8px;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+/* scrollbar aesthetics */
+.chat-window::-webkit-scrollbar{ width:10px; }
+.chat-window::-webkit-scrollbar-track{ background: transparent; }
+.chat-window::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border-radius:10px;
+  border: 2px solid transparent;
+}
+
+/* responsiveness */
+@media (max-width:980px){
+  .chat-card{ grid-template-columns: 1fr; padding:14px; }
+  .chat-window{ height:60vh; }
+  .panel{ order:2; }
+}
+
+/* micro interactions */
+.bubble, .avatar { transition: transform 220ms var(--ease), opacity 220ms var(--ease); }

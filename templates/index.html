@@ -1,43 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Gemini AI Chatbot</title>
-    <style>
-        body { font-family: Arial; margin: 30px; }
-        #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
-        #input { width: 80%; padding: 10px; }
-        #send { padding: 10px; }
-        .user { color: blue; }
-        .bot { color: green; }
-    </style>
+
+    <!-- Add before your JS logic (in <head> or above your script) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My AI Chatbot</title>
+
+  <!-- Google font (optional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Link to the stylesheet in static/ -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>AI Chatbot</h1>
-    <div id="chat"></div>
-    <input type="text" id="input" placeholder="Type your message..." />
-    <button id="send">Send</button>
+  <div class="app-wrap">
+    <div class="chat-card">
 
-    <script>
-        const chatDiv = document.getElementById("chat");
-        const input = document.getElementById("input");
-        const sendBtn = document.getElementById("send");
+      <!-- LEFT panel: brand & info -->
+      <div class="panel">
+        <div class="brand">
+          <div class="logo">G</div>
+          <div>
+            <h1>My AI ChatBot</h1>
+            <p>A warm, helpful assistant</p>
+          </div>
+        </div>
 
-        sendBtn.onclick = async () => {
-            const message = input.value;
-            if (!message) return;
-            
-            chatDiv.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
-            input.value = "";
+        <div class="desc">
+          <p>Ask anything — code, study help, or fun chat. The bot keeps your recent messages for context.</p>
+        </div>
 
-            const res = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message })
-            });
-            const data = await res.json();
-            chatDiv.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
-            chatDiv.scrollTop = chatDiv.scrollHeight;
-        };
-    </script>
+        <div>
+          <button class="small-btn" onclick="clearChat()">Clear chat</button>
+        </div>
+
+        <div style="margin-top:auto; color:var(--muted); font-size:0.9rem;">
+          <strong>Tip:</strong> Keep queries short for faster replies.
+        </div>
+      </div>
+
+      <!-- RIGHT panel: chat -->
+      <div class="chat-area">
+        <div id="chat-window" class="chat-window">
+          <!-- messages will be appended here -->
+        </div>
+
+        <div class="composer">
+          <div class="input">
+            <input id="message" type="text" placeholder="Type your message..." autocomplete="off" />
+          </div>
+          <button id="send" class="btn">Send</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const chatWindow = document.getElementById("chat-window");
+    const input = document.getElementById("message");
+    const sendBtn = document.getElementById("send");
+
+    function addUserMessage(text){
+        const row = document.createElement("div");
+        row.className = "msg user-row";
+        row.innerHTML = `
+            <div class="bubble">${escapeHtml(text)}</div>
+            <div class="avatar user">You</div>
+        `;
+        chatWindow.appendChild(row);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+
+    function addBotMessage(text){
+  // Convert Markdown -> HTML safely
+        const rawHtml = marked.parse(text || "");
+        const safeHtml = DOMPurify.sanitize(rawHtml);
+
+        const row = document.createElement("div");
+        row.className = "msg bot-row";
+        row.innerHTML = `
+            <div class="avatar bot">AI</div>
+            <div class="bubble">${safeHtml}</div>
+        `;
+        chatWindow.appendChild(row);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+    function addTyping(){
+      const row = document.createElement("div");
+      row.className = "msg bot-row typing-row";
+      row.id = "typing";
+      row.innerHTML = `
+        <div class="avatar bot">AI</div>
+        <div class="bubble typing">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      `;
+      chatWindow.appendChild(row);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    function removeTyping(){
+      const t = document.getElementById("typing");
+      if(t) t.remove();
+    }
+
+    sendBtn.onclick = async () => {
+      const message = input.value.trim();
+      if(!message) return;
+      addUserMessage(message);
+      input.value = "";
+      addTyping();
+
+      try{
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        removeTyping();
+        addBotMessage(data.reply || "Sorry, I couldn't get a response.");
+      }catch(e){
+        removeTyping();
+        addBotMessage("Network error — please try again.");
+        console.error(e);
+      }
+    };
+
+    input.addEventListener("keydown", (e)=> {
+      if(e.key === "Enter") sendBtn.click();
+    });
+
+    function clearChat(){
+      chatWindow.innerHTML = "";
+      // optionally inform server to clear session history if you add that endpoint
+    }
+
+    // small helper to prevent XSS
+    function escapeHtml(unsafe){
+      return unsafe
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
 </body>
 </html>

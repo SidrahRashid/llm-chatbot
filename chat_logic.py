@@ -41,9 +41,14 @@ def generate_reply(prompt):
 
 def chat_loop():
     system_prompt = (
-        "You are a helpful, concise assistant. Provide clear answers; when unsure, say you don't know. "
-        "Prefer short step-by-step instructions when asked."
-    )
+    "You are a helpful, concise assistant. ALWAYS respond in Markdown format. "
+    "Use headings, bold, italics, code blocks, numbered lists, and line breaks where appropriate. "
+    "Keep answers readable: separate paragraphs with a blank line, use **bold** for emphasis, "
+    "use `inline code` for short code snippets, and triple-backtick fenced blocks for longer code examples. "
+    "If the user asks for a short answer, give a short paragraph; if they ask for steps, use a numbered list. "
+    "When you do not know something, say 'I don't know' rather than hallucinating."
+)
+
     history = []  
     print("Chatbot ready — type 'quit' to exit.")
     while True:
