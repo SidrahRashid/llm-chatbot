@@ -2,6 +2,8 @@
 
 A Python Flask web app powered by Google Gemini API, allowing real-time AI conversations through a browser. The chatbot is fully LLM-driven, preserves conversation context, and is accessible globally without exposing your API key.
 
+## RENDER DEPLOYMENT LINK: https://my-ai-chatbot-ykdz.onrender.com ##
+
 🌟 Features
 AI-driven conversations: No rules, JSON, or predefined flows — pure Gemini LLM responses.
 Context memory: Remembers the last messages for coherent replies.
